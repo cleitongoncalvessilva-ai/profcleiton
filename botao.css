@@ -7,10 +7,8 @@
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s;
-}
- .btn {
-   margin-left: 100px;
-   margin-top: 10px;
+  margin-left: 100px;
+  margin-top: 10px;
 }
 
 .btn:hover {
