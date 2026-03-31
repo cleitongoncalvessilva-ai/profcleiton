@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Portal do Professor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f4f6f8;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    input, button, textarea {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .card {
+      background: white;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .stars span {
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .rating {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>📚 Portal do Professor</h1>
+
+  <h3>Adicionar Disciplina</h3>
+  <input type="text" id="disciplinaInput" placeholder="Nome da disciplina">
+  <button onclick="adicionarDisciplina()">Adicionar</button>
+
+  <div id="listaDisciplinas"></div>
+</div>
+
+<script>
+  let disciplinas = JSON.parse(localStorage.getItem("disciplinas")) || [];
+
+  function salvar() {
+    localStorage.setItem("disciplinas", JSON.stringify(disciplinas));
+  }
+
+  function adicionarDisciplina() {
+    const nome = document.getElementById("disciplinaInput").value;
+    if (!nome) return;
+
+    disciplinas.push({
+      nome,
+      conteudos: [],
+      votos: []
+    });
+
+    document.getElementById("disciplinaInput").value = "";
+    salvar();
+    render();
+  }
+
+  function adicionarConteudo(index) {
+    const input = document.getElementById("conteudo-" + index);
+    if (!input.value) return;
+
+    disciplinas[index].conteudos.push(input.value);
+    input.value = "";
+    salvar();
+    render();
+  }
+
+  function votar(index, nota) {
+    disciplinas[index].votos.push(nota);
+    salvar();
+    render();
+  }
+
+  function media(votos) {
+    if (votos.length === 0) return "Sem avaliação";
+    return (votos.reduce((a,b) => a+b, 0) / votos.length).toFixed(1);
+  }
+
+  function render() {
+    const lista = document.getElementById("listaDisciplinas");
+    lista.innerHTML = "";
+
+    disciplinas.forEach((disc, i) => {
+      const div = document.createElement("div");
+      div.className = "card";
+
+      div.innerHTML = `
+        <h3>${disc.nome}</h3>
+
+        <strong>Conteúdos:</strong>
+        <ul>
+          ${disc.conteudos.map(c => `<li>${c}</li>`).join("")}
+        </ul>
+
+        <input id="conteudo-${i}" placeholder="Novo conteúdo">
+        <button onclick="adicionarConteudo(${i})">Adicionar Conteúdo</button>
+
+        <div class="stars">
+          Avaliar aula:
+          ${[1,2,3,4,5].map(n => `<span onclick="votar(${i}, ${n})">⭐</span>`).join("")}
+        </div>
+
+        <div class="rating">
+          Média: ${media(disc.votos)}
+        </div>
+      `;
+
+      lista.appendChild(div);
+    });
+  }
+
+  render();
+</script>
+
+</body>
+</html>
