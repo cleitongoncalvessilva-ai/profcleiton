@@ -1,19 +1,9 @@
-.btn {
-  background-color: #100BFF;
-  color: red;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 100px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 2.0s;
-}
- .btn {
-  position: absolute;
-  top: 80px;
-  left: 80px;
-}
-
-.btn:hover {
-  background-color: #0056b3;
-}
+button {
+            width: 220px;
+            height: 70px;
+            padding: 10px 20px;
+            border: 3px solid #40916c;
+            border-radius: 20px;
+            background-color: #b7e4c7;
+            color: #1b4332;
+     }
